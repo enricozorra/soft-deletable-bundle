@@ -19,6 +19,9 @@ class SoftDeleteTest extends KernelTestCase
         self::bootKernel();
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected static function createKernel(array $options = []): AndanteSoftDeletableKernel
     {
         /** @var AndanteSoftDeletableKernel $kernel */
@@ -55,7 +58,7 @@ class SoftDeleteTest extends KernelTestCase
         $em->remove($organization1);
 
         $em->flush();
-        \sleep(1); //Giving time to mysqlite to update file
+        \sleep(1); // Giving time to mysqlite to update file
         $addresses = $addressRepository->findAll();
         $organizations = $organizationRepository->findAll();
         self::assertCount(1, $addresses);
@@ -89,7 +92,7 @@ class SoftDeleteTest extends KernelTestCase
         $em->remove($address1);
         $em->remove($organization1);
         $em->flush();
-        \sleep(1); //Giving time to mysqlite to update file
+        \sleep(1); // Giving time to mysqlite to update file
         $dateTimeImmutable1 = $address1->getDeletedAt();
         $dateTimeImmutable2 = $organization1->getDeletedAt();
         self::assertNotNull($dateTimeImmutable1);

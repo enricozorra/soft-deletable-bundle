@@ -20,6 +20,9 @@ class MappingTest extends KernelTestCase
         self::bootKernel();
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected static function createKernel(array $options = []): AndanteSoftDeletableKernel
     {
         /** @var AndanteSoftDeletableKernel $kernel */

@@ -8,6 +8,16 @@ services:
     autowire: true
 
   Symfony\Component\Security\Core\Security: null
+  # Doctrine expects an annotation reader service; ensure an alias exists for
+  # the reader so tests that rely on annotation mapping can compile the container.
+  doctrine.orm.metadata.annotation_reader:
+    alias: "annotations.reader"
+  # Provide a minimal annotations.reader service for tests. If Doctrine Annotations
+  # is available this will instantiate the real reader; otherwise container will
+  # fail early (which is helpful to surface missing dev dependencies).
+  annotations.reader:
+    class: Doctrine\Common\Annotations\AnnotationReader
+    public: true
 
 framework:
   test: true
@@ -24,5 +34,5 @@ doctrine:
       fixtures:
         type: annotation
         prefix: 'Andante\SoftDeletableBundle\Tests\Fixtures\Entity'
-        dir: '%kernel.project_dir%/tests/Fixtures/Entity/'
+        dir: "%kernel.project_dir%/tests/Fixtures/Entity/"
         is_bundle: false

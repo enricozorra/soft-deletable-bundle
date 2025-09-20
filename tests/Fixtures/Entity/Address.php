@@ -14,7 +14,9 @@ class Address implements SoftDeletableInterface
 {
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer")
      */
     private ?int $id = null;

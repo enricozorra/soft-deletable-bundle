@@ -12,8 +12,12 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AndanteSoftDeletableKernel extends Kernel
 {
+    /** @var string[] */
     private array $configs = [];
 
+    /**
+     * @return array<object>
+     */
     public function registerBundles(): array
     {
         return [
@@ -34,7 +38,7 @@ class AndanteSoftDeletableKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return \sprintf(__DIR__.'/../../var/cache/test/%s/', \hash('crc32b', ((string) \json_encode($this->configs))));
+        return \sprintf(__DIR__.'/../../var/cache/test/%s/', \hash('crc32b', (string) \json_encode($this->configs)));
     }
 
     public function getLogDir(): string
@@ -42,6 +46,9 @@ class AndanteSoftDeletableKernel extends Kernel
         return __DIR__.'/../../var/logs/test/';
     }
 
+    /**
+     * @param string[] $configs
+     */
     public function setConfigs(array $configs): self
     {
         $this->configs = $configs;

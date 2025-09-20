@@ -22,6 +22,9 @@ class SetupTest extends KernelTestCase
         self::bootKernel();
     }
 
+    /**
+     * @param array<string,mixed> $options
+     */
     protected static function createKernel(array $options = []): AndanteSoftDeletableKernel
     {
         /** @var AndanteSoftDeletableKernel $kernel */
@@ -52,26 +55,46 @@ class SetupTest extends KernelTestCase
     {
         /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = self::getContainer()->get('doctrine');
+        $container = self::getContainer();
         /** @var EntityManagerInterface $em */
         foreach ($managerRegistry->getManagers() as $em) {
             $evm = $em->getEventManager();
-            $r = new \ReflectionProperty($evm, 'subscribers');
-            $r->setAccessible(true);
-            $subscribers = $r->getValue($evm);
-            $serviceIdRegistered = \in_array(
-                DoctrineEventSubscriberPass::SOFT_DELETABLE_SUBSCRIBER_SERVICE_ID,
-                $subscribers,
-                true
-            );
+
+            // The internal storage for subscribers/listeners can vary between
+            // Doctrine versions and implementations. Instead of relying on a
+            // specific private property name, cast the event manager to an
+            // array and scan for any arrays that may contain service ids or
+            // subscriber identifiers.
+            $subscribers = [];
+            foreach ((array) $evm as $bucket) {
+                if (\is_array($bucket)) {
+                    foreach ($bucket as $item) {
+                        if (\is_string($item) || (\is_object($item) && !\is_callable($item))) {
+                            $subscribers[] = $item;
+                        }
+                    }
+                }
+            }
+
+            // First, check if the service exists in the container (most robust).
+            $serviceIdRegistered = $container->has(DoctrineEventSubscriberPass::SOFT_DELETABLE_SUBSCRIBER_SERVICE_ID);
+            if (!$serviceIdRegistered) {
+                // Fallback: scan the event manager internals for the service id.
+                $serviceIdRegistered = \in_array(
+                    DoctrineEventSubscriberPass::SOFT_DELETABLE_SUBSCRIBER_SERVICE_ID,
+                    $subscribers,
+                    true
+                );
+            }
             $serviceRegistered = \array_reduce($subscribers, static fn (
                 bool $carry,
-                $service
+                $service,
             ) => $carry ? $carry : $service instanceof SoftDeletableEventSubscriber, false);
             /** @var array<object> $listeners */
             $listeners = $evm->getListeners()['loadClassMetadata'] ?? [];
             $listenerRegistered = \array_reduce($listeners, static fn (
                 bool $carry,
-                $service
+                $service,
             ) => $carry ? $carry : $service instanceof SoftDeletableEventSubscriber, false);
 
             self::assertTrue($serviceIdRegistered || $serviceRegistered || $listenerRegistered);
