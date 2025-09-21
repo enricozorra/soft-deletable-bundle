@@ -28,15 +28,15 @@ class SoftDeletableFilter extends SQLFilter
     {
         if ($targetEntity->getReflectionClass()->implementsInterface(SoftDeletableInterface::class)) {
             if (
-                \array_key_exists($targetEntity->getName(), $this->disabled) &&
-                true === $this->disabled[$targetEntity->getName()]
+                \array_key_exists($targetEntity->getName(), $this->disabled)
+                && true === $this->disabled[$targetEntity->getName()]
             ) {
                 return '';
             }
 
             if (
-                \array_key_exists($targetEntity->rootEntityName, $this->disabled) &&
-                true === $this->disabled[$targetEntity->rootEntityName]
+                \array_key_exists($targetEntity->rootEntityName, $this->disabled)
+                && true === $this->disabled[$targetEntity->rootEntityName]
             ) {
                 return '';
             }

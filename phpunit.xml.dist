@@ -13,9 +13,10 @@
     </exclude>
   </coverage>
   <php>
-    <env name="APP_DEBUG" value="false"/>
-    <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3306/test?serverVersion=5.7"/>
-    <!-- <env name="DATABASE_URL" value="sqlite:///%kernel.project_dir%/var/test_database.db"/> -->
+    <env name="APP_DEBUG" value="true"/>
+  <!-- <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3306/test?serverVersion=5.7"/> -->
+  <!-- Use an in-memory SQLite database for tests to avoid filesystem/permission issues. -->
+  <env name="DATABASE_URL" value="sqlite:///:memory:"/>
   </php>
   <testsuites>
     <testsuite name="Default test suite">

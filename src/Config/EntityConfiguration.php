@@ -61,7 +61,10 @@ class EntityConfiguration
         return $this;
     }
 
-    public static function createFromArray(array $config, EntityConfiguration $fallbackConfig = null): self
+    /**
+     * @param array<string,mixed> $config
+     */
+    public static function createFromArray(array $config, ?EntityConfiguration $fallbackConfig = null): self
     {
         $entityConfiguration = new self();
         if (\array_key_exists('property_name', $config)) {
