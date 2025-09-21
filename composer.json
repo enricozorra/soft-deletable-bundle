@@ -1,6 +1,6 @@
 {
-  "name": "andanteproject/soft-deletable-bundle",
-  "description": "A Symfony Bundle to handle soft deletable with Doctrine Entities",
+  "name": "enricozorra/soft-deletable-bundle",
+  "description": "Fork of andanteproject/soft-deletable-bundle — updated for Symfony 7 compatibility",
   "keywords": [
     "symfony",
     "symfony-bundle",
@@ -9,10 +9,12 @@
     "soft-delete",
     "php",
     "php7",
-    "php74"
+    "php74",
+    "symfony7"
   ],
   "type": "symfony-bundle",
   "license": "MIT",
+  "homepage": "https://github.com/enricozorra/soft-deletable-bundle",
   "authors": [
     {
       "name": "Andante Project",
@@ -27,6 +29,10 @@
       "homepage": "https://github.com/lucacividini"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enricozorra/soft-deletable-bundle.git"
+  },
   "require": {
     "php": "^7.4 || ^8.0",
     "symfony/framework-bundle": "^4.4 | ^5.0 | ^6.0 | ^7.0",
